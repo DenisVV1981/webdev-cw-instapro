@@ -196,3 +196,15 @@
   width: 100%;
   text-align: center;
 }
+
+.form-input-component{
+  display: flex;
+  flex-direction: column;
+  align-content: stretch;
+  flex-wrap: nowrap;
+  gap: 15px;
+}
+.form-input-title{
+  text-align: center;
+  font-size: 26px;  
+  }
