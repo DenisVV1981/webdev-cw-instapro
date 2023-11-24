@@ -68,3 +68,18 @@ export function uploadImage({ file }) {
     return response.json();
   });
 }
+
+export function uploadNewPost({description, imageUrl, token }) {
+  return fetch(postsHost, {
+    method: "POST",
+    body: JSON.stringify({
+     description,
+    imageUrl,
+    }),
+    headers: {
+      Authorization: token,
+    }
+  }).then((responce) => {
+    return responce.json();
+  })
+}

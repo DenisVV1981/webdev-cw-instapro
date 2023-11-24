@@ -1,6 +1,7 @@
 import { renderHeaderComponent } from "./header-component.js";
 import { renderUploadImageComponent } from "./upload-image-component.js";
 
+
 export function renderAddPostPageComponent({
    appEl,
     onAddPostClick
@@ -29,16 +30,14 @@ export function renderAddPostPageComponent({
 
     appEl.innerHTML = appHtml;
 
-  const headerContainerElement = document.querySelector(".header-container");
   renderHeaderComponent({
-    element: headerContainerElement,
+    element: document.querySelector(".header-container"),
   });
-
-  const uploadContainerElement = document.querySelector(".upload-image-container");  
+  let link  ="";
   renderUploadImageComponent({
-      element: uploadContainerElement,
-      onImageUrlChange: (ссылкаНаКартинку)=>{
-          console.log(ссылкаНаКартинку);
+      element: document.querySelector(".upload-image-container"),
+      onImageUrlChange: (imageLink)=>{
+         link  = imageLink;
           // TODO: как-то использовать данные из (imageUrl)
         }
     });
@@ -46,7 +45,7 @@ export function renderAddPostPageComponent({
     document.getElementById("add-button").addEventListener("click", () => {
       onAddPostClick({
         description: "Описание картинки",
-        imageUrl: "https://image.png",
+        imageUrl: link,
       });
     });
   };
