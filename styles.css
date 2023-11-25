@@ -54,6 +54,27 @@
   cursor: pointer;
 }
 
+
+.post-header-user {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.post-header-user > .post-header__user-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 40px;
+  margin-right: 10px;
+  margin-bottom: 20px;
+}
+
+.post-header-user > .post-header__user-name {
+  font-size: 28px;
+  line-height: 35px;
+}
+
 .post-header__user-image {
   width: 40px;
   height: 40px;

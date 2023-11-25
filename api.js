@@ -103,3 +103,4 @@ export function getUserPosts({ token, id }) {
       return data.posts;
     });
 }
+
