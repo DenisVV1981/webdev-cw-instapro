@@ -104,3 +104,25 @@ export function getUserPosts({ token, id }) {
     });
 }
 
+export function addLike({ token, id }) {
+return fetch(postsHost + "/" + id +"/like", {
+  method: "POST",
+
+  headers: {
+    Authorization: token,
+  }}
+).then((responce) => {
+return responce.json();
+})
+}
+export function removeLike({ token, id }) {
+return fetch(postsHost + "/" + id +"/dislike", {
+  method: "POST",
+
+  headers: {
+    Authorization: token,
+  }}
+).then((responce) => {
+return responce.json();
+})
+}

@@ -134,11 +134,13 @@ const renderApp = () => {
   if (page === POSTS_PAGE) {
     return renderPostsPageComponent({
       appEl,
+      token: getToken(),
+      
     });
   }
 
   if (page === USER_POSTS_PAGE) {
-    return renderUserPostsPageComponent({ appEl, user });
+    return renderUserPostsPageComponent({ appEl, token: getToken() });
   }
 };
 

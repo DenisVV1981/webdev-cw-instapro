@@ -1,12 +1,10 @@
 import { USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { posts, goToPage } from "../index.js";
+import { initChangeLike } from "./init-change-like.js"; 
 
-
-export function renderPostsPageComponent({ appEl }) {
-  // TODO: реализовать рендер постов из api
-  console.log("Актуальный список постов:", posts);
-
+export function renderPostsPageComponent({ appEl, token }) {
+  
   /**
    * TODO: чтобы отформатировать дату создания поста в виде "19 минут назад"
    * можно использовать https://date-fns.org/v2.29.3/docs/formatDistanceToNow
@@ -26,10 +24,13 @@ export function renderPostsPageComponent({ appEl }) {
                     </div>
                     <div class="post-likes">
                       <button data-post-id="${post.id}" class="like-button">
-                        <img src="./assets/images/like-active.svg">
+                      <img src="./assets/images/like-${ post.isLike
+                        ? ""
+                        : "not-"
+                      }active.svg">
                       </button>
                       <p class="post-likes-text">
-                        Нравится: <strong>${post.likes.length}</strong>
+                        Нравится: <strong id="post-likes-text-strong-${post.id}">${post.likes.length}</strong>
                       </p>
                     </div>
                     <p class="post-text">
@@ -58,4 +59,8 @@ export function renderPostsPageComponent({ appEl }) {
       });
     });
   }
+  initChangeLike({ classLike: "like-button", token, likeChanged: ({postId, likes}) => {
+    document.getElementById("post-likes-text-strong-"  + postId).innerHTML = likes.length;
+    // TODO: обновить статус нравится/ненравится в кнопке:button и обновить картинку
+  }});
 }
