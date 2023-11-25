@@ -44,7 +44,7 @@ export function renderAddPostPageComponent({
 
     document.getElementById("add-button").addEventListener("click", () => {
       onAddPostClick({
-        description: "Описание картинки",
+        description: document.querySelector("textarea").value,
         imageUrl: link,
       });
     });
