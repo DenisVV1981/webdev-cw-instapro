@@ -23,14 +23,15 @@ export function renderPostsPageComponent({ appEl, token }) {
                       <img class="post-image" src="${post.imageUrl}">
                     </div>
                     <div class="post-likes">
-                      <button data-post-id="${post.id}" class="like-button">
-                      <img src="./assets/images/like-${ post.isLike
-                        ? ""
-                        : "not-"
-                      }active.svg">
+                      <button data-post-id="${post.id}"
+                        id="like-button-${post.id}"
+                        class="like-button"
+                        data-is-like="${post.isLiked}" >
+                        <img id="img-like-${post.id}"
+                        src="./assets/images/like-${post.isLiked ? "" : "not-"}active.svg">
                       </button>
                       <p class="post-likes-text">
-                        Нравится: <strong id="post-likes-text-strong-${post.id}">${post.likes.length}</strong>
+                      Нравится: <strong id="post-likes-text-strong-${post.id}">${post.likes.length}</strong>
                       </p>
                     </div>
                     <p class="post-text">
@@ -61,6 +62,11 @@ export function renderPostsPageComponent({ appEl, token }) {
   }
   initChangeLike({ classLike: "like-button", token, likeChanged: ({postId, likes}) => {
     document.getElementById("post-likes-text-strong-"  + postId).innerHTML = likes.length;
-    // TODO: обновить статус нравится/ненравится в кнопке:button и обновить картинку
+    let isLike = !(document.getElementById("like-button-"  + postId).getAttribute("data-is-like") == "true"
+      ? true
+      : false) ;
+    document.getElementById("like-button-"  + postId).setAttribute("data-is-like", isLike);
+    document.getElementById("img-like-"  + postId).setAttribute("src", `./assets/images/like-${isLike ? "" : "not-"}active.svg`);
+    
   }});
 }

@@ -8,7 +8,7 @@ for (const likeButton of likeButtons){
         
         const id = likeButton.dataset.postId;
 
-        if(likeButton.dataset.isLike){
+        if(likeButton.dataset.isLike === "true"){
             removeLike({ token, id })
                 .then((response) => {
                     likeChanged({postId: id, likes : response.post.likes});

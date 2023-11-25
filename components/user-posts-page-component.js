@@ -9,6 +9,7 @@ export function renderUserPostsPageComponent({ appEl, token  }) {
    * TODO: чтобы отформатировать дату создания поста в виде "19 минут назад"
    * можно использовать https://date-fns.org/v2.29.3/docs/formatDistanceToNow
    */
+  console.log(posts);
   const appHtml = `
               <div class="page-container">
                 <div class="header-container"></div>
@@ -24,12 +25,12 @@ export function renderUserPostsPageComponent({ appEl, token  }) {
                       <img class="post-image" src="${post.imageUrl}">
                     </div>
                     <div class="post-likes">
-                      <button data-post-id="${post.id}" class="like-button" data-is-like="${post.isLike}"
-                      id="post-likes-button-${post.id}">
-                        <img src="./assets/images/like-${ post.isLike
-                          ? ""
-                          : "not-"
-                        }active.svg">
+                      <button data-post-id="${post.id}"
+                        id="like-button-${post.id}"
+                        class="like-button"
+                        data-is-like="${post.isLiked}" >
+                        <img id="img-like-${post.id}"
+                        src="./assets/images/like-${post.isLiked ? "" : "not-"}active.svg">
                       </button>
                       <p class="post-likes-text">
                       Нравится: <strong id="post-likes-text-strong-${post.id}">${post.likes.length}</strong>
@@ -54,16 +55,14 @@ export function renderUserPostsPageComponent({ appEl, token  }) {
     element: document.querySelector(".header-container"),
   });
 
-  // for (let userEl of document.querySelectorAll(".post-header")) {
-  //   userEl.addEventListener("click", () => {
-  //     goToPage(USER_POSTS_PAGE, {
-  //       userId: userEl.dataset.userId,
-  //     });
-  //   });
-  // }
 initChangeLike({ classLike: "like-button", token, likeChanged: ({postId, likes}) => {
   document.getElementById("post-likes-text-strong-"  + postId).innerHTML = likes.length;
-  // TODO: обновить статус нравится/ненравится в кнопке:button и обновить картинку
+  let isLike = !(document.getElementById("like-button-"  + postId).getAttribute("data-is-like") == "true"
+    ? true
+    : false) ;
+  document.getElementById("like-button-"  + postId).setAttribute("data-is-like", isLike);
+  document.getElementById("img-like-"  + postId).setAttribute("src", `./assets/images/like-${isLike ? "" : "not-"}active.svg`);
+  
 }});
 
 }
