@@ -1,6 +1,9 @@
 import { addLike, removeLike } from "../api.js";
 
 export const initChangeLike = ({classLike, token, likeChanged}) => {
+
+    if(!token) return;
+
 const likeButtons  =  document.querySelectorAll("." + classLike)
 for (const likeButton of likeButtons){
     likeButton.addEventListener("click", (event)=> {

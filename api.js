@@ -28,9 +28,13 @@ export function registerUser({ login, password, name, imageUrl }) {
   return fetch(baseHost + "/api/user", {
     method: "POST",
     body: JSON.stringify({
-      login,
+      login: login
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;"),
       password,
-      name,
+      name: name
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;"),
       imageUrl,
     }),
   }).then((response) => {
@@ -45,7 +49,9 @@ export function loginUser({ login, password }) {
   return fetch(baseHost + "/api/user/login", {
     method: "POST",
     body: JSON.stringify({
-      login,
+      login: login
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;"),
       password,
     }),
   }).then((response) => {

@@ -38,13 +38,19 @@ export function renderAddPostPageComponent({
       element: document.querySelector(".upload-image-container"),
       onImageUrlChange: (imageLink)=>{
          link  = imageLink;
-          // TODO: как-то использовать данные из (imageUrl)
         }
     });
 
     document.getElementById("add-button").addEventListener("click", () => {
+
+      if (!document.querySelector("textarea").value || !link){
+        return;
+      }
+
       onAddPostClick({
-        description: document.querySelector("textarea").value,
+        description: document.querySelector("textarea").value
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;"),
         imageUrl: link,
       });
     });
