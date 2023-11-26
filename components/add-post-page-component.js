@@ -1,14 +1,9 @@
 import { renderHeaderComponent } from "./header-component.js";
 import { renderUploadImageComponent } from "./upload-image-component.js";
 
-
-export function renderAddPostPageComponent({
-   appEl,
-    onAddPostClick
-   }) {
-  const render = () => {
-  
-    const appHtml = `
+export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
+    const render = () => {
+        const appHtml = `
     <div class="page-container">
       <div class="header-container"></div>
 
@@ -28,33 +23,33 @@ export function renderAddPostPageComponent({
     </div>
   `;
 
-    appEl.innerHTML = appHtml;
+        appEl.innerHTML = appHtml;
 
-  renderHeaderComponent({
-    element: document.querySelector(".header-container"),
-  });
-  let link  ="";
-  renderUploadImageComponent({
-      element: document.querySelector(".upload-image-container"),
-      onImageUrlChange: (imageLink)=>{
-         link  = imageLink;
-        }
-    });
+        renderHeaderComponent({
+            element: document.querySelector(".header-container"),
+        });
+        let link = "";
+        renderUploadImageComponent({
+            element: document.querySelector(".upload-image-container"),
+            onImageUrlChange: (imageLink) => {
+                link = imageLink;
+            },
+        });
 
-    document.getElementById("add-button").addEventListener("click", () => {
+        document.getElementById("add-button").addEventListener("click", () => {
+            if (!document.querySelector("textarea").value || !link) {
+                return;
+            }
 
-      if (!document.querySelector("textarea").value || !link){
-        return;
-      }
+            onAddPostClick({
+                description: document
+                    .querySelector("textarea")
+                    .value.replaceAll("<", "&lt;")
+                    .replaceAll(">", "&gt;"),
+                imageUrl: link,
+            });
+        });
+    };
 
-      onAddPostClick({
-        description: document.querySelector("textarea").value
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;"),
-        imageUrl: link,
-      });
-    });
-  };
- 
-  render();
+    render();
 }

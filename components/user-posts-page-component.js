@@ -1,25 +1,25 @@
-import { USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage } from "../index.js";
-import { initChangeLike } from "./init-change-like.js"; 
+import { posts } from "./app.js";
+import { initChangeLike } from "./init-change-like.js";
+import { formatDistance } from "date-fns";
+import { ru } from "date-fns/locale";
 
-export function renderUserPostsPageComponent({ appEl, token  }) {
-
-  /**
-   * TODO: чтобы отформатировать дату создания поста в виде "19 минут назад"
-   * можно использовать https://date-fns.org/v2.29.3/docs/formatDistanceToNow
-   */
-  console.log(posts);
-  const appHtml = `
+export function renderUserPostsPageComponent({ appEl, token }) {
+    const appHtml = `
               <div class="page-container">
                 <div class="header-container"></div>
-                <div class="post-header-user" data-user-id="${posts[0].user.id}">
-                    <img src="${posts[0].user.imageUrl}" class="post-header__user-image">
+                <div class="post-header-user" data-user-id="${
+                    posts[0].user.id
+                }">
+                    <img src="${
+                        posts[0].user.imageUrl
+                    }" class="post-header__user-image">
                     <p class="post-header__user-name">${posts[0].user.name}</p>
                 </div>
                 <ul class="posts">
-                ${posts.map((post) => {
-                    return `<li class="post">
+                ${posts
+                    .map((post) => {
+                        return `<li class="post">
                    
                     <div class="post-image-container">
                       <img class="post-image" src="${post.imageUrl}">
@@ -30,10 +30,14 @@ export function renderUserPostsPageComponent({ appEl, token  }) {
                         class="like-button"
                         data-is-like="${post.isLiked}" >
                         <img id="img-like-${post.id}"
-                        src="./assets/images/like-${post.isLiked ? "" : "not-"}active.svg">
+                        src="./assets/images/like-${
+                            post.isLiked ? "" : "not-"
+                        }active.svg">
                       </button>
                       <p class="post-likes-text">
-                      Нравится: <strong id="post-likes-text-strong-${post.id}">${post.likes.length}</strong>
+                      Нравится: <strong id="post-likes-text-strong-${
+                          post.id
+                      }">${post.likes.length}</strong>
                       </p>
                     </div>
                     <p class="post-text">
@@ -41,28 +45,44 @@ export function renderUserPostsPageComponent({ appEl, token  }) {
                       ${post.description}
                     </p>
                     <p class="post-date">
-                      19 минут назад
+                    ${formatDistance(new Date(post.createdAt), new Date(), {
+                        addSuffix: true,
+                        locale: ru,
+                    })} 
                     </p>
-                    </li>`
-                }).join("")
-              }
+                    </li>`;
+                    })
+                    .join("")}
                 </ul>
               </div>`;
 
-  appEl.innerHTML = appHtml;
+    appEl.innerHTML = appHtml;
 
-  renderHeaderComponent({
-    element: document.querySelector(".header-container"),
-  });
+    renderHeaderComponent({
+        element: document.querySelector(".header-container"),
+    });
 
-initChangeLike({ classLike: "like-button", token, likeChanged: ({postId, likes}) => {
-  document.getElementById("post-likes-text-strong-"  + postId).innerHTML = likes.length;
-  let isLike = !(document.getElementById("like-button-"  + postId).getAttribute("data-is-like") == "true"
-    ? true
-    : false) ;
-  document.getElementById("like-button-"  + postId).setAttribute("data-is-like", isLike);
-  document.getElementById("img-like-"  + postId).setAttribute("src", `./assets/images/like-${isLike ? "" : "not-"}active.svg`);
-  
-}});
-
+    initChangeLike({
+        classLike: "like-button",
+        token,
+        likeChanged: ({ postId, likes }) => {
+            document.getElementById(
+                "post-likes-text-strong-" + postId,
+            ).innerHTML = likes.length;
+            let isLike = !(document
+                .getElementById("like-button-" + postId)
+                .getAttribute("data-is-like") === "true"
+                ? true
+                : false);
+            document
+                .getElementById("like-button-" + postId)
+                .setAttribute("data-is-like", isLike);
+            document
+                .getElementById("img-like-" + postId)
+                .setAttribute(
+                    "src",
+                    `./assets/images/like-${isLike ? "" : "not-"}active.svg`,
+                );
+        },
+    });
 }
