@@ -1,23 +1,55 @@
+import { renderHeaderComponent } from "./header-component.js";
+import { renderUploadImageComponent } from "./upload-image-component.js";
+
 export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
-  const render = () => {
-    // TODO: Реализовать страницу добавления поста
-    const appHtml = `
+    const render = () => {
+        const appHtml = `
     <div class="page-container">
       <div class="header-container"></div>
-      Cтраница добавления поста
-      <button class="button" id="add-button">Добавить</button>
+
+         <div class="form-input-component">
+            <div id="component-form-adding" style="display: none;">
+               Пост публикуется...
+             </div>
+             <h3 class="form-input-title">Добавить пост</h3>
+            <div class="upload-image-container"></div>
+            <label>
+                Комментарий к посту:
+                <textarea class="input textarea" rows="4"></textarea>
+            </label>    
+           <button class="button" id="add-button">Добавить</button>
+        </div>
+      </div>
     </div>
   `;
 
-    appEl.innerHTML = appHtml;
+        appEl.innerHTML = appHtml;
 
-    document.getElementById("add-button").addEventListener("click", () => {
-      onAddPostClick({
-        description: "Описание картинки",
-        imageUrl: "https://image.png",
-      });
-    });
-  };
+        renderHeaderComponent({
+            element: document.querySelector(".header-container"),
+        });
+        let link = "";
+        renderUploadImageComponent({
+            element: document.querySelector(".upload-image-container"),
+            onImageUrlChange: (imageLink) => {
+                link = imageLink;
+            },
+        });
 
-  render();
+        document.getElementById("add-button").addEventListener("click", () => {
+            if (!document.querySelector("textarea").value || !link) {
+                return;
+            }
+
+            onAddPostClick({
+                description: document
+                    .querySelector("textarea")
+                    .value.replaceAll("<", "&lt;")
+                    .replaceAll(">", "&gt;"),
+                imageUrl: link,
+            });
+        });
+    };
+
+    render();
 }

@@ -1,24 +1,26 @@
-import { USER_POSTS_PAGE } from "./routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage } from "./app.js";
+import { posts } from "./app.js";
 import { initChangeLike } from "./init-change-like.js";
 import { formatDistance } from "date-fns";
 import { ru } from "date-fns/locale";
 
-export function renderPostsPageComponent({ appEl, token }) {
+export function renderUserPostsPageComponent({ appEl, token }) {
     const appHtml = `
               <div class="page-container">
                 <div class="header-container"></div>
+                <div class="post-header-user" data-user-id="${
+                    posts[0].user.id
+                }">
+                    <img src="${
+                        posts[0].user.imageUrl
+                    }" class="post-header__user-image">
+                    <p class="post-header__user-name">${posts[0].user.name}</p>
+                </div>
                 <ul class="posts">
                 ${posts
                     .map((post) => {
                         return `<li class="post">
-                    <div class="post-header" data-user-id="${post.user.id}">
-                        <img src="${
-                            post.user.imageUrl
-                        }" class="post-header__user-image">
-                        <p class="post-header__user-name">${post.user.name}</p>
-                    </div>
+                   
                     <div class="post-image-container">
                       <img class="post-image" src="${post.imageUrl}">
                     </div>
@@ -43,10 +45,10 @@ export function renderPostsPageComponent({ appEl, token }) {
                       ${post.description}
                     </p>
                     <p class="post-date">
-                      ${formatDistance(new Date(post.createdAt), new Date(), {
-                          addSuffix: true,
-                          locale: ru,
-                      })} 
+                    ${formatDistance(new Date(post.createdAt), new Date(), {
+                        addSuffix: true,
+                        locale: ru,
+                    })} 
                     </p>
                     </li>`;
                     })
@@ -60,13 +62,6 @@ export function renderPostsPageComponent({ appEl, token }) {
         element: document.querySelector(".header-container"),
     });
 
-    for (let userEl of document.querySelectorAll(".post-header")) {
-        userEl.addEventListener("click", () => {
-            goToPage(USER_POSTS_PAGE, {
-                userId: userEl.dataset.userId,
-            });
-        });
-    }
     initChangeLike({
         classLike: "like-button",
         token,
